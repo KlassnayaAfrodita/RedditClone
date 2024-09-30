@@ -4,6 +4,8 @@ import (
 	"context"
 	"log/slog"
 	"net/http"
+
+	"github.com/KlassnayaAfrodita/RedditClone/pkg/session"
 )
 
 var (
@@ -25,7 +27,7 @@ func AuthorizeMiddleware(logger slog.Logger, sr *session.SessionRepository, next
 			return
 		}
 
-		session, err := r.Cookie("session_id")
+		cookie, err := r.Cookie("session_id")
 		_, canbeWithouthSess := noSessUrls[r.URL.Path]
 		if err != nil && !canbeWithouthSess {
 			http.Error(w, "you dont auth", 200)
@@ -33,7 +35,8 @@ func AuthorizeMiddleware(logger slog.Logger, sr *session.SessionRepository, next
 			return
 		}
 
-		session, err = sr.GetUserID(session)
+		sessionUser := cookie.Value
+		sess, err := sr.GetUserID(sessionUser)
 		if err != nil {
 			http.Error(w, "db error", 500)
 			logger.Error("Resource: AuthorizeMiddleware",
@@ -45,8 +48,8 @@ func AuthorizeMiddleware(logger slog.Logger, sr *session.SessionRepository, next
 
 		type sessionKey string
 		var SessionKey sessionKey = "session_id"
-		session, err = sr.Add(session.UserID)
-		ctx := context.WithValue(r.Context(), SessionKey, session)
+		sess, err = sr.Add(sess.UserID)
+		ctx := context.WithValue(r.Context(), SessionKey, sess)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

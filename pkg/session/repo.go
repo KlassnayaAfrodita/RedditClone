@@ -44,14 +44,14 @@ func (repo *SessionRepository) GetUserID(sessionToken string) (*Session, error) 
 	return &Session{}, sessionNotFound
 }
 
-func (repo *SessionRepository) Add(userID int) (string, error) {
+func (repo *SessionRepository) Add(userID int) (*Session, error) {
 	for _, session := range repo.data {
 		if session.UserID == userID {
 			_, err := repo.Update(userID)
 			if err != nil {
-				return "", err
+				return &Session{}, err
 			}
-			return "", nil
+			return &Session{}, nil
 		}
 	}
 
@@ -62,11 +62,12 @@ func (repo *SessionRepository) Add(userID int) (string, error) {
 		if err != nil {
 			repo.mu.Lock()
 			defer repo.mu.Unlock()
-			repo.data = append(repo.data, &Session{
+			session := &Session{
 				UserID: userID,
 				Token:  sessionToken,
-			})
-			return sessionToken, nil
+			}
+			repo.data = append(repo.data, session)
+			return session, nil
 		}
 		sessionToken = createSessionToken()
 	}

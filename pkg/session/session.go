@@ -8,6 +8,6 @@ type Session struct {
 type SessionRepo interface {
 	//TODO
 	GetUserID(sessionToken string) (*Session, error)
-	Add(userID int) (bool, error)
+	Add(userID int) (string, error)
 	Delete(userID int) (bool, error)
 }
