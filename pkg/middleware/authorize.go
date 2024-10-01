@@ -48,7 +48,8 @@ func AuthorizeMiddleware(logger slog.Logger, sr *session.SessionRepository, next
 
 		type sessionKey string
 		var SessionKey sessionKey = "session_id"
-		sess, err = sr.Add(sess.UserID)
+		userID := sess.UserID
+		sess, err = sr.Add(userID)
 		ctx := context.WithValue(r.Context(), SessionKey, sess)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

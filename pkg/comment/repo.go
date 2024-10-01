@@ -25,12 +25,12 @@ func (repo *CommentRepository) GetAllByPost(postID int) ([]*Comment, error) {
 	return comments, nil
 }
 
-func (repo *CommentRepository) GetAllByUser(userID int) ([]*Comment, error) {
+func (repo *CommentRepository) GetAllByUser(createdBy string) ([]*Comment, error) {
 	comments := make([]*Comment, 0, 10)
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 	for _, comment := range repo.data {
-		if comment.UserID == userID {
+		if comment.CreatedBy == createdBy {
 			comments = append(comments, comment)
 		}
 	}

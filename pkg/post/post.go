@@ -12,7 +12,7 @@ type Post struct {
 type PostRepo interface {
 	GetAll() ([]*Post, error)
 	GetByCategiry(category string) ([]*Post, error)
-	GetByUser(userID int) ([]*Post, error)
+	GetByUser(login string) ([]*Post, error)
 	GetByID(id int) (*Post, error)
 	Add(post *Post) (int, error)
 	Update(newPost *Post) (bool, error)

@@ -9,4 +9,5 @@ type User struct {
 type UserRepo interface {
 	Authorize(login, pass string) (*User, error)
 	Register(login, pass string) (*User, error)
+	GetUserByID(id int) (*User, error)
 }

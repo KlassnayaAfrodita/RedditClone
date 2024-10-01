@@ -35,12 +35,12 @@ func (repo *PostRepository) GetByCategiry(category string) ([]*Post, error) {
 	return posts, nil
 }
 
-func (repo *PostRepository) GetByUser(userID int) ([]*Post, error) {
+func (repo *PostRepository) GetByUser(login string) ([]*Post, error) {
 	posts := make([]*Post, 0, 10)
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 	for _, post := range repo.data {
-		if post.CreatedBy == userID {
+		if post.CreatedBy == login {
 			posts = append(posts, post)
 		}
 	}
