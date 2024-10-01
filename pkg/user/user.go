@@ -1,9 +1,9 @@
 package user
 
 type User struct {
-	ID       int    `json:"user_id"`
+	ID       int    `json:"user_id,omitempty"`
 	Login    string `json:"user_login"`
-	password string `json:"user_password`
+	Password string `json:"user_password"`
 }
 
 type UserRepo interface {

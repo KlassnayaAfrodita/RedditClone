@@ -88,3 +88,27 @@ func (repo *SessionRepository) Update(userID int) (string, error) {
 	}
 	return "", sessionNotFound
 }
+
+func (repo *SessionRepository) Delete(userID int) (bool, error) {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+
+	i := -1
+	for idx, session := range repo.data {
+		if session.UserID != userID {
+			continue
+		}
+		i = idx
+	}
+	if i < 0 {
+		return false, nil
+	}
+
+	if i < len(repo.data)-1 {
+		copy(repo.data[i:], repo.data[i+1:])
+	}
+	repo.data[len(repo.data)-1] = nil // or the zero value of T
+	repo.data = repo.data[:len(repo.data)-1]
+
+	return true, nil
+}

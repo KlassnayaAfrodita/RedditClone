@@ -27,9 +27,9 @@ func NewUserRepository() *UserRepository {
 		mu: &sync.Mutex{},
 		data: map[string]*User{
 			"eyenot": &User{
-				ID:       1,
+				ID:       0,
 				Login:    "eyenot",
-				password: "123",
+				Password: "123",
 			},
 		},
 	}
@@ -40,24 +40,24 @@ func (repo *UserRepository) Authorize(login, pass string) (*User, error) {
 	if !ok {
 		return nil, ErrNoUser
 	}
-	if user.password != pass {
+	if user.Password != pass {
 		return nil, ErrBadPass
 	}
 	return user, nil
 }
 
-func (repo *UserRepository) Register(login, pass string) (*User, error) {
-	if user, ok := repo.data[login]; ok {
-		return user, ErrUserExists
-	}
-	newID := RandID()
-	for _, user := range repo.data {
-		if newID == user.ID {
-			newID = RandID()
-		}
-	}
-	return &User{ID: newID, Login: login, password: pass}, nil
-}
+// func (repo *UserRepository) Register(login, pass string) (*User, error) {
+// 	if user, ok := repo.data[login]; ok {
+// 		return user, ErrUserExists
+// 	}
+// 	newID := RandID()
+// 	for _, user := range repo.data {
+// 		if newID == user.ID {
+// 			newID = RandID()
+// 		}
+// 	}
+// 	return &User{ID: newID, Login: login, password: pass}, nil
+// }
 
 func (repo *UserRepository) Register(login, pass string) (*User, error) {
 	for _, user := range repo.data {
@@ -71,7 +71,7 @@ func (repo *UserRepository) Register(login, pass string) (*User, error) {
 	newUser := &User{
 		ID:       repo.lastID,
 		Login:    login,
-		password: pass,
+		Password: pass,
 	}
 	return newUser, nil
 }
