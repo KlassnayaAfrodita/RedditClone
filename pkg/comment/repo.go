@@ -82,7 +82,7 @@ func (repo *CommentRepository) Delete(id int) (bool, error) {
 }
 
 func (repo *CommentRepository) Update(newComment *Comment) (bool, error) {
-	comment, err := repo.GetByID(newComment.id)
+	comment, err := repo.GetByID(newComment.ID)
 	if err != nil {
 		return false, err
 	}
