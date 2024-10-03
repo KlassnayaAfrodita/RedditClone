@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"io"
 	"log/slog"
@@ -138,8 +137,6 @@ func (h *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	sess := ctx.Value(SessionKey).(*session.Session)
 
-	newCtx := context.WithValue(ctx, SessionKey, *session.Session)
-
 	cookie := &http.Cookie{
 		Name:    "session_id",
 		Expires: time.Now().AddDate(0, 0, -1),
@@ -148,5 +145,5 @@ func (h *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	h.SessionRepo.Delete(sess.UserID)
 
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r.WithContext(newCtx), "/", 200)
+	http.Redirect(w, r, "/", 200)
 }
