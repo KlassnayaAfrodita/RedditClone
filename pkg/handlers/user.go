@@ -133,7 +133,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) { //* п�
 }
 
 // TODO удалить контекст, сделать недействительными куки, редирект
-func (h *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) Logout(w http.ResponseWriter, r *http.Request) { ///* получаем get запрос
 	ctx := r.Context()
 	sess := ctx.Value(SessionKey).(*session.Session)
 
